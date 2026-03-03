@@ -5,24 +5,22 @@
 </nav>
 
 
-<div class="container">
+<div class="container-fluid px-5">
 
-  <div class="text-center p-5">
-    <h1 class="display-2">Factura Britt</h1>
-    <p class="lead text-muted">
-     by Pruebas
-    </p>
-  </div>
+
+  <h1 class="display-2">Factura Britt</h1>
+  <p class="lead text-muted">
+    by Pruebas
+  </p>
+
 
   <div *ngIf="productList; else loader" >
-    <div class="pt-5">
-      <h5>Factura <span *ngIf="sendBill" class="badge bg-primary">{{ sendBill | uppercase }}</span></h5>
-      <h5>Fecha <span class="badge bg-secondary">{{sendDate | date: 'dd/MM/yy'}}</span></h5>
-      <h5>Total <span class="badge bg-secondary">{{total | number : '1.0'}}</span></h5>
+    <div class="">
+      <h5>Factura <span *ngIf="sendBill" class="">{{ sendBill | uppercase }}</span> Fecha <span class="">{{sendDate | date: 'dd/MM/yy'}}</span>Total <span class="">{{total | number : '1.0'}}</span></h5>
     </div>
 
-    <div class="row justify-content-end mb-3">
-      <div class="col d-flex justify-content-end">
+    <div class="">
+      <div class="">
         <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModal">
           NUEVA FACTURA
         </button>
@@ -34,54 +32,37 @@
       </div>
     </div>
 
-    <div>
-      <div *ngIf="message">
-        <app-alert [message]="message"></app-alert>
-      </div>
-    </div>
+    <table class="table table-hover">
+      <thead class="table">
+        <tr>
+          <th scope="col">Sku</th>
+          <th scope="col">Producto</th>
+          <th scope="col">Total</th>
+          <th scope="col">Acción</th>
+        </tr>
+      </thead>
 
-    <div class="card">
-      <div class="card-body">
-
-
-        <table class="table table-hover">
-          <thead class="table">
-            <tr>
-              <th scope="col">Sku</th>
-              <th scope="col">Producto</th>
-              <th scope="col">QTY</th>
-              <th scope="col">Precio</th>
-              <th scope="col">Total</th>
-              <th scope="col">Acción</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngIf="!billingList || billingList.DETALLES.length == 0; else showTable">
-              <th scope="row">-</th>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-            </tr>
-            <ng-template #showTable>
-              <tr *ngFor="let item of billingList.DETALLES">
-                <th scope="row">{{item.CODIGO_ARTICULO}}</th>
-                <td>{{item.ARTICULO}}</td>
-                <td>{{item.CANTIDAD}}</td>
-                <td>{{item.PRECIO | number : '1.0'}}</td>
-                <td>{{item.TOTAL_LINEA | number : '1.0'}}</td>
-                <td>
-                  <button class="btn btn-danger" (click)="removeLine(item.LINEA, sendBill)"><i
-                      class="bi bi-trash3"></i></button>
-                </td>
-              </tr>
-            </ng-template>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <tbody>
+        <tr *ngIf="!billingList || billingList.DETALLES.length == 0; else showTable">
+          <th scope="row">-</th>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+        <ng-template #showTable>
+          <tr *ngFor="let item of billingList.DETALLES">
+            <th scope="row">{{item.CODIGO_ARTICULO}}</th>
+            <td>{{item.ARTICULO}}</td>
+            <td>{{item.TOTAL_LINEA | number : '1.0'}}</td>
+            <td>
+              <button class="btn btn-danger" (click)="removeLine(item.LINEA, sendBill)">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
   </div>
 
   <ng-template #loader>
@@ -94,38 +75,25 @@
 </div>
 
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Nueva Factura</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="formBill">
-          <div class="mb-3">
             <label for="billNumber" class="form-label">Numero de factura</label>
             <input type="text" class="form-control" id="billNumber" formControlName="billNumber"
               aria-describedby="billNumber">
-            <div *ngIf="formsBill['billNumber'].invalid && formsBill['billNumber'].touched" class="text-danger mt-1">
-              Requerido
-            </div>
-          </div>
-          <div class="mb-3">
             <label for="date" class="form-label">Fecha</label>
             <input type="date" class="form-control" id="date" formControlName="date">
-            <div *ngIf="formsBill['date'].invalid && formsBill['date'].touched" class="text-danger mt-1">
-              Requerido
-            </div>
-          </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="save()"
-          [disabled]="formBill.invalid">Guardar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="save()">Guardar</button>
       </div>
     </div>
   </div>
@@ -136,7 +104,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Nueva Línea</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -145,26 +113,21 @@
             <label for="articleCode" class="form-label">Producto</label>
             <select class="form-select" aria-label="Default select example" formControlName="articleCode">
               <option value="" selected>Seleccione un producto</option>
-              <option *ngFor="let item of productList.PRODUCTOS" [value]="item.CODIGO_ARTICULO"> {{item.DESCRIPCION}}
+              <option *ngFor="let item of productList.PRODUCTOS" [value]="item.CODIGO_ARTICULO">
+                {{item.DESCRIPCION}}
               </option>
             </select>
-            <div *ngIf="formsDetail['articleCode'].invalid && formsDetail['articleCode'].touched"
-              class="text-danger mt-1">
-              Requerido
-            </div>
           </div>
           <div class="mb-3">
             <label for="qty" class="form-label">Cantidad</label>
             <input type="number" class="form-control" id="qty" formControlName="qty">
-            <div *ngIf="formsDetail['qty'].invalid && formsDetail['qty'].touched" class="text-danger mt-1">
-              Requerido
-            </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="sendNewLine()"
-          [disabled]="formDetail.invalid">Guardar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="sendNewLine()">
+          Guardar
+        </button>
       </div>
     </div>
   </div>
